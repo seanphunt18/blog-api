@@ -8,7 +8,7 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 
-describe('Shopping List', function() {
+describe('Blog Posts', function() {
 
   before(function() {
     return runServer();
@@ -21,7 +21,7 @@ describe('Shopping List', function() {
   it('should list items on GET', function() {
 
     return chai.request(app)
-      .get('/shopping-list')
+      .get('/blog-posts')
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
@@ -29,7 +29,7 @@ describe('Shopping List', function() {
 
         res.body.length.should.be.at.least(1);
 
-        const expectedKeys = ['id', 'name', 'checked'];
+        const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
         res.body.forEach(function(item) {
           item.should.be.a('object');
           item.should.include.keys(expectedKeys);
@@ -40,13 +40,13 @@ describe('Shopping List', function() {
   it('should add an item on POST', function() {
     const newItem = {name: 'coffee', checked: false};
     return chai.request(app)
-      .post('/shopping-list')
+      .post('/blog-posts')
       .send(newItem)
       .then(function(res) {
         res.should.have.status(201);
         res.should.be.json;
         res.body.should.be.a('object');
-        res.body.should.include.keys('id', 'name', 'checked');
+        res.body.should.include.keys('id', 'title', 'content', 'author', 'publishDate');
         res.body.id.should.not.be.null;
 
         res.body.should.deep.equal(Object.assign(newItem, {id: res.body.id}));
@@ -62,12 +62,12 @@ describe('Shopping List', function() {
 
     return chai.request(app)
 
-      .get('/shopping-list')
+      .get('/blog-posts')
       .then(function(res) {
         updateData.id = res.body[0].id;
 
         return chai.request(app)
-          .put(`/shopping-list/${updateData.id}`)
+          .put(`/blog-posts/${updateData.id}`)
           .send(updateData);
       })
 
@@ -82,10 +82,10 @@ describe('Shopping List', function() {
   it('should delete items on DELETE', function() {
     return chai.request(app)
 
-      .get('/shopping-list')
+      .get('/blog-posts')
       .then(function(res) {
         return chai.request(app)
-          .delete(`/shopping-list/${res.body[0].id}`);
+          .delete(`/blog-posts/${res.body[0].id}`);
       })
       .then(function(res) {
         res.should.have.status(204);
