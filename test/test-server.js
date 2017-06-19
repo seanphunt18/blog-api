@@ -93,4 +93,3 @@ describe('Blog Posts', function() {
         res.should.have.status(204);
       });
   });
-});
