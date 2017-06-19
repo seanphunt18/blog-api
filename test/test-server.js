@@ -38,7 +38,7 @@ describe('Blog Posts', function() {
   });
 
   it('should add an item on POST', function() {
-    const newItem = {name: 'coffee', checked: false};
+    const newItem = {title: 'New Post', content: 'This is a new post.', author: 'New Author', publishDate: '06/18/2017'};
     return chai.request(app)
       .post('/blog-posts')
       .send(newItem)
@@ -56,8 +56,10 @@ describe('Blog Posts', function() {
   it('should update items on PUT', function() {
 
     const updateData = {
-      name: 'foo',
-      checked: true
+      title: 'Updated Title',
+      content: 'This is some updated content.',
+      author: 'Updated Author',
+      publishDate: '06/18/2017'
     };
 
     return chai.request(app)
