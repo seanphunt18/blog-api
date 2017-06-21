@@ -41,6 +41,7 @@ describe('Blog Posts', function() {
     const newItem = {title: 'New Post', content: 'This is a new post.', author: 'New Author', publishDate: '06/18/2017'};
     return chai.request(app)
       .post('/blog-posts')
+      .set('content-type', 'application/json')
       .send(newItem)
       .then(function(res) {
         res.should.have.status(201);
@@ -67,17 +68,15 @@ describe('Blog Posts', function() {
       .get('/blog-posts')
       .then(function(res) {
         updateData.id = res.body[0].id;
-
+        console.log(updateData);
         return chai.request(app)
-          .put(`/blog-posts/${updateData.id}`)
-          .send(updateData);
+          .put('/blog-posts/' + updateData.id)
+          .set('content-type', 'application/json')
+          .send(updateData)
       })
 
       .then(function(res) {
-        res.should.have.status(200);
-        res.should.be.json;
-        res.body.should.be.a('object');
-        res.body.should.deep.equal(updateData);
+        res.should.have.status(204);
       });
   });
 
@@ -93,3 +92,4 @@ describe('Blog Posts', function() {
         res.should.have.status(204);
       });
   });
+});
